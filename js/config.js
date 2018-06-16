@@ -1,0 +1,1 @@
+var gameSpeed = 4;
