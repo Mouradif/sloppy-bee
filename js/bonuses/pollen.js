@@ -16,6 +16,7 @@ function spawnPollen(game, name, bonus) {
 		pollen.sprite.x -=2.5;
 		if (isColliding(pollen.sprite, game.sloppyBee.sprites.bee, 20)){
             game.sloppyBee.score += bonus;
+            game.sloppyBee.beep.play();
             pollen.sprite.destroy();
         }
 			
