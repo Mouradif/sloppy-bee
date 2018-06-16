@@ -6,6 +6,7 @@ function spawnSpit(game, name, malus, speed) {
 		spit = game.add.tileSprite(gameWidth + 48, spitY, 48, 48, 'spit1');
 		spit.animations.add('glow');
 		spit.animations.play('glow', 24, true);
+		spit.scale.setTo(1.5);
 		game.sloppyBee.enemies.push({
 			name: name,
 			sprite: spit

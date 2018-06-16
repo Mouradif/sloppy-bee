@@ -22,9 +22,8 @@ function inversTouchToFly(game) {
 	}
 }
 
-function stastic(game){
-    
-    if (game.input.pointer1.isDown) {
+function staticFly(game){
+	if (game.input.pointer1.isDown) {
 		game.sloppyBee.sprites.bee.fallingStage = 0;
 		game.sloppyBee.sprites.bee.escalatingStage++;
 		game.sloppyBee.sprites.bee.y -= 8;

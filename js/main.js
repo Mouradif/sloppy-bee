@@ -33,8 +33,8 @@ function render() {
 function update() {
 	parallaxBackgrounds(this);
 	this.sloppyBee.moveFunction(this);
-	spawnSpit(this, 'spit1', inversTouchToFly, 5);
-	spawnSpit(this, 'spit2', inversTouchToFly, 4);
+	spawnSpit(this, 'spit1', touchToFly, 5);
+	spawnSpit(this, 'spit2', staticFly, 4);
 	spawnSpit(this, 'spit3', inversTouchToFly, 8);
 	if (
 		this.sloppyBee.sprites.bee.y >= (gameHeight - this.sloppyBee.sprites.bee.height / 1.5) ||
