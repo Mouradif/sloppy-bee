@@ -8,6 +8,11 @@ function preload() {
 	this.load.spritesheet('bluespit', 'image/spit1.png', 48, 48, 8);
 	this.load.spritesheet('brownspit', 'image/spit2.png', 48, 48, 8);
 	this.load.spritesheet('pollen1', 'image/fleur1.png', 48, 48, 2);
+	this.load.spritesheet('pollen1','image/pollen.png',48,48,2 );
+	this.load.audio('beep','son/Beep.wav');
+	this.load.audio('mbeep','son/mbeep.wav');
+	this.load.audio('death','son/die.wav');
+    
 }
 
 
@@ -18,6 +23,11 @@ function create () {
 			sol : game.add.tileSprite(0, 0, gameWidth, gameHeight, 'sol'),
 			monts : game.add.tileSprite(0, 0, gameWidth, gameHeight, 'monts'),
 			bee: game.add.sprite(gameWidth / 2, gameHeight / 2, 'bee')
+		},
+		audio: {
+			pollenized: game.add.audio('mbeep'),
+			pesticidized: game.add.audio('beep'),
+			death: game.add.audio('death')
 		},
 		enemies: [],
 		flowers: []
@@ -33,6 +43,8 @@ function create () {
 		fontSize: '32px',
 		fill: '#000'
 	});
+	this.sloppyBee.beep = game.add.audio('beep');
+	this.sloppyBee.mbeep = 
 	this.sloppyBee.gameDifficulty = 0;
 	this.gameStarted = false;
 }
@@ -47,9 +59,8 @@ function update() {
 		this.sloppyBee.sprites.bee.y >= (gameHeight - this.sloppyBee.sprites.bee.height / 1.5) ||
 		this.sloppyBee.sprites.bee.y < (0 - this.sloppyBee.sprites.bee.height / 2)
 	) {
-		gameOver(this.game);
+		gameOver(this);
 	}
-
 	this.sloppyBee.gameDifficulty++;
 	this.sloppyBee.moveFunction(this);
 	for (var i = 0; i < this.sloppyBee.enemies.length; i++) {
@@ -58,6 +69,7 @@ function update() {
 		if (isColliding(spit.sprite, this.sloppyBee.sprites.bee, 20)) {
 			this.sloppyBee.moveFunction = spit.malus;
 			spit.sprite.destroy();
+			this.sloppyBee.audio.pesticidized.play();
 			this.sloppyBee.enemies.splice(i, 1);
 			this.sloppyBee.sprites.bee.tintingFramesRemaining = 50;
 			this.sloppyBee.score -= spit.speed;
@@ -73,6 +85,8 @@ function update() {
 		pollen.sprite.x -= gameSpeed;
 		if (isColliding(pollen.sprite, this.sloppyBee.sprites.bee, 20)){
 			this.sloppyBee.score += pollen.bonus;
+			if (!this.sloppyBee.audio.pollenized.isPlaying || this.sloppyBee.audio.pollenized.currentTime > 80)
+				this.sloppyBee.audio.pollenized.play();
 			pollen.sprite.destroy();
 		}
 			
@@ -87,13 +101,14 @@ function update() {
 		spawnPollen(this, 'pollen', randomInt % 3);
 	var malchance = Math.floor(this.sloppyBee.gameDifficulty / 250) - this.sloppyBee.enemies.length;
 	if (malchance > 1) {
-		let enemies = ['bluespit', 'brownspit'];
-		let maluses = [inversTouchToFly, staticFly];
+		var enemies = ['bluespit', 'brownspit'];
+		var maluses = [inversTouchToFly, staticFly];
 		spawnSpit(this, 'spit', enemies[randomInt % enemies.length], maluses[randomInt % maluses.length], (randomInt % 4 + 2) * gameSpeed);
 	}
 	this.sloppyBee.scoreText.text = 'Score: ' + this.sloppyBee.score;
 	parallaxBackgrounds(this);
 	tintTheBee(this);
+
 }
 
 var mainState = {

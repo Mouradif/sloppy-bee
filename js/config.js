@@ -1,1 +1,1 @@
-var gameSpeed = 4;
+var gameSpeed = 2;

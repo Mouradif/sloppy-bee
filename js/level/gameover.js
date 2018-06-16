@@ -1,3 +1,5 @@
 function gameOver(game) {
-	game.paused = true;
+	// Not working :(
+	game.sloppyBee.audio.death.play();
+	game.game.paused = true;
 }
