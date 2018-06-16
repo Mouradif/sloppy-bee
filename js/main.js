@@ -23,24 +23,24 @@ function create () {
 
 	this.sloppyBee.sprites.bee.fallingStage = 0;
 	this.sloppyBee.sprites.bee.escalatingStage = 0;
-
+	this.sloppyBee.moveFunction = touchToFly;
 }
 
 function render() {
 	// game.debug.pointer(game.input.pointer1);
 }
+
 function update() {
 	parallaxBackgrounds(this);
-	touchToFly(this);
-	spawnSpit(this, 'spit1', 5);
-	spawnSpit(this, 'spit2', 4);
-	spawnSpit(this, 'spit3', 8);
+	this.sloppyBee.moveFunction(this);
+	spawnSpit(this, 'spit1', inversTouchToFly, 5);
+	spawnSpit(this, 'spit2', inversTouchToFly, 4);
+	spawnSpit(this, 'spit3', inversTouchToFly, 8);
 	if (
 		this.sloppyBee.sprites.bee.y >= (gameHeight - this.sloppyBee.sprites.bee.height / 1.5) ||
 		this.sloppyBee.sprites.bee.y < (0 - this.sloppyBee.sprites.bee.height / 2)
-	) {
-		game.paused = true;
-	}
+	)
+		gameOver(this.game);
 }
 
 var mainState = {

@@ -1,4 +1,4 @@
-function spawnSpit(game, name, speed) {
+function spawnSpit(game, name, malus, speed) {
 	var spitIndex = getElementIndexByName(game.sloppyBee.enemies, name);
 	var spit;
 	if (spitIndex == -1){
@@ -13,6 +13,8 @@ function spawnSpit(game, name, speed) {
 	} else {
 		spit = game.sloppyBee.enemies[spitIndex];
 		spit.sprite.x -= speed;
+		if (isColliding(spit.sprite, game.sloppyBee.sprites.bee, 20))
+			game.sloppyBee.moveFunction = malus;
 		if (spit.sprite.x < -48) {
 			spit.sprite.destroy();
 			game.sloppyBee.enemies.splice(spitIndex, 1);
