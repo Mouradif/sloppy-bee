@@ -21,3 +21,16 @@ function inversTouchToFly(game) {
 		game.sloppyBee.sprites.bee.y -= Math.log(game.sloppyBee.sprites.bee.fallingStage);
 	}
 }
+
+function stastic(game){
+    
+    if (game.input.pointer1.isDown) {
+		game.sloppyBee.sprites.bee.fallingStage = 0;
+		game.sloppyBee.sprites.bee.escalatingStage++;
+		game.sloppyBee.sprites.bee.y -= 8;
+	} else {
+		game.sloppyBee.sprites.bee.escalatingStage = 0;
+		game.sloppyBee.sprites.bee.fallingStage++;
+		game.sloppyBee.sprites.bee.y += 8;
+	}
+}
