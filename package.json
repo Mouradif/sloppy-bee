@@ -1,0 +1,22 @@
+{
+  "name": "sloppy-bee",
+  "version": "1.0.0",
+  "description": "A Sogeti Green X Games jam project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mouradif/sloppy-bee.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mouradif/sloppy-bee/issues"
+  },
+  "homepage": "https://github.com/Mouradif/sloppy-bee#readme",
+  "dependencies": {
+    "phaser-ce": "^2.10.6"
+  }
+}
