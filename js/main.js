@@ -30,18 +30,8 @@ function render() {
 }
 
 function update() {
-	this.sloppyBee.sprites.sky.tilePosition.x -= 0.1;
-	this.sloppyBee.sprites.sol.tilePosition.x-=2.5;
-	this.sloppyBee.sprites.monts.tilePosition.x-=0.5;
-	if (game.input.pointer1.isDown) {
-		this.sloppyBee.sprites.bee.fallingStage = 0;
-		this.sloppyBee.sprites.bee.escalatingStage++;
-		this.sloppyBee.sprites.bee.y -= Math.log(this.sloppyBee.sprites.bee.escalatingStage);
-	} else {
-		this.sloppyBee.sprites.bee.escalatingStage = 0;
-		this.sloppyBee.sprites.bee.fallingStage++;
-		this.sloppyBee.sprites.bee.y += Math.log(this.sloppyBee.sprites.bee.fallingStage);
-	}
+	parallaxBackgrounds(this);
+	touchToFly(this);
 	if (this.sloppyBee.sprites.bee.y >= (gameHeight - this.sloppyBee.sprites.bee.height / 1.5)) {
 		game.paused = true;
 	}
