@@ -5,6 +5,7 @@ function preload() {
 	this.load.image('bee', 'image/bee.png');
 	this.load.image('sol', 'image/sol.png');
 	this.load.image('monts', 'image/monts.png');
+    this.load.spritesheet('spit1','image/spit1.png',48,48,8 );
 }
 
 
@@ -30,6 +31,10 @@ function render() {
 }
 
 function update() {
+    if(this.sloppyBee.sprites.spit1 == null){
+        this.sloppyBee.sprites.spit1 = game.add.tileSprite(0, 0, gameWidth, gameHeight, 'spit1');
+    }
+    
 	parallaxBackgrounds(this);
 	touchToFly(this);
 	if (this.sloppyBee.sprites.bee.y >= (gameHeight - this.sloppyBee.sprites.bee.height / 1.5)) {
