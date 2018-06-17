@@ -2,6 +2,7 @@
 
 function preload() {
 	this.load.image('sky','image/sky.png');
+	this.load.image('fullGameOverPannel', 'image/full_gameover.png');
 	this.load.image('gameOverPannel', 'image/gameover_panel.png');
 	this.load.image('leSaviezVous', 'image/lesaviezvous.png');
 	this.load.image('buttonRejouer', 'image/rejouer.png');
@@ -9,7 +10,7 @@ function preload() {
 	//this.load.image('tipsText', 'image/panel_text.png');
 	this.load.spritesheet('bee', 'image/bee.png', 48, 34, 3);
 	this.load.image('sol', 'image/solfleuri.png');
-	var f = this.load.image('monts', 'image/mount.png');
+	this.load.image('monts', 'image/mount.png');
 	this.load.spritesheet('bluespit', 'image/spit1.png', 48, 48, 8);
 	this.load.spritesheet('brownspit', 'image/spit2.png', 48, 48, 8);
 	this.load.spritesheet('pollen1', 'image/fleur1.png', 48, 48, 2);
