@@ -38,7 +38,10 @@ var mainMenu = {
         this.imagMenu.sprites.sky.tilePosition.x -= gameSpeed*0.1 ;
         this.imagMenu.sprites.fleur.tilePosition.x -= gameSpeed*1.1 ;
         this.imagMenu.sprites.vent.tilePosition.x -= gameSpeed*10 ;
-        this.imagMenu.sprites.bee.x += gameSpeed*0.1 ;
+        this.imagMenu.sprites.bee.x += gameSpeed * 0.2;
+        if(this.imagMenu.sprites.bee.x > gameWidth+this.imagMenu.sprites.bee.width ){
+            this.imagMenu.sprites.bee.x = 0 - this.imagMenu.sprites.bee.width;
+        }
        
     }
 
