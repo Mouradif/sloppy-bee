@@ -26,8 +26,8 @@ var mainMenu = {
                 jouer: this.add.sprite(gameWidth/2-gameWidth*0.3, gameHeight / 2 -100, 'jouer')
 			}
 		};
-		var t = this.imagMenu.sprites.Jouer.inputEnabled = true;
-		t.events.onInputDown.add(laucher, this);
+		this.imagMenu.sprites.jouer.inputEnabled = true;;
+		this.imagMenu.sprites.jouer.events.onInputDown.add(laucher, this);
 	},
 	update: function(game) {
 		this.imagMenu.sprites.sky.tilePosition.x -= window.gameSpeed*0.1 ;
