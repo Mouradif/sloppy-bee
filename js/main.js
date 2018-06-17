@@ -2,6 +2,8 @@
 
 function preload() {
 	this.load.image('sky','image/sky.png');
+	this.load.image('cloud1', 'image/cloud_1.png');
+    this.load.image('cloud2','image/cloud_2.png');
 	this.load.image('fullGameOverPannel', 'image/full_gameover.png');
 	this.load.image('gameOverPannel', 'image/gameover_panel.png');
 	this.load.image('leSaviezVous', 'image/lesaviezvous.png');
@@ -28,6 +30,12 @@ function create () {
 	this.sloppyBee = {
 		sprites: {
 			sky: game.add.tileSprite(0, 0, gameWidth, gameHeight, 'sky'),
+            
+            cloud1: this.add.sprite(gameWidth/4,gameWidth/3, 'cloud1'),
+            cloud2: this.add.sprite(gameWidth/2, gameHeight / 2, 'cloud2'),
+            cloud3: this.add.sprite(gameWidth/1, gameWidth/3, 'cloud1'),
+            cloud4: this.add.sprite(gameWidth/2, gameHeight/2.5 / 2, 'cloud2'),
+            
 			monts : game.add.tileSprite(0, gameHeight - 160, gameWidth, 160, 'monts'),
 			sol : game.add.tileSprite(0, gameHeight - 107, gameWidth, 107, 'sol'),
 			bee: game.add.sprite(gameWidth / 2, gameHeight / 2, 'bee')
@@ -66,6 +74,32 @@ function create () {
 }
 
 function update() {
+    this.sloppyBee.sprites.cloud1.x-=0.2;
+     this.sloppyBee.sprites.cloud2.x-=0.15;
+    this.sloppyBee.sprites.cloud3.x-=0.1;
+     this.sloppyBee.sprites.cloud4.x-=0.2;
+    
+    //
+    
+      //
+        if(this.sloppyBee.sprites.cloud1.x > gameWidth+this.sloppyBee.sprites.cloud1.width ){
+			this.sloppyBee.sprites.cloud1.x = 0 - this.sloppyBee.sprites.cloud1.width;
+		}
+//        //
+       if(this.sloppyBee.sprites.cloud2.x > gameWidth+this.sloppyBee.sprites.cloud2.width ){
+			this.sloppyBee.sprites.cloud2.x = 0 - this.sloppyBee.sprites.cloud2.width;
+		}
+        //
+       if(this.sloppyBee.sprites.cloud3.x > gameWidth+this.sloppyBee.sprites.cloud3.width ){
+		this.sloppyBee.sprites.cloud3.x = 0 - this.sloppyBee.sprites.cloud3.width;
+	}
+       //
+        if(this.sloppyBee.sprites.cloud4.x > gameWidth+this.sloppyBee.sprites.cloud4.width ){
+			this.sloppyBee.sprites.cloud4.x = 0 - this.sloppyBee.sprites.cloud4.width;
+		}
+        
+    
+    //
 	if (this.input.activePointer.isDown && this.gameOver == false)
 		this.gameStarted = true;
 	if (this.gameStarted === false)
