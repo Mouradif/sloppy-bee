@@ -14,7 +14,6 @@ function preload() {
 	this.load.audio('death','son/die.wav');
 	this.load.audio('game','son/gameLoop.wav');
 	this.load.audio('mobAdd','son/mobAdd.mp3');
-    
 }
 
 
@@ -52,11 +51,11 @@ function create () {
 	this.sloppyBee.beep = game.add.audio('beep');
 	this.sloppyBee.gameDifficulty = 0;
 	this.gameStarted = false;
-	this.gameOver = true;
+	this.gameOver = false;
 }
 
 function update() {
-	if (this.input.activePointer.isDown)
+	if (this.input.activePointer.isDown && this.gameOver == false)
 		this.gameStarted = true;
 	if (this.gameStarted === false)
 		return;
@@ -132,5 +131,4 @@ var game = new Phaser.Game(gameWidth, gameHeight);
 game.state.add('main', mainState);
 game.state.add('menu',mainMenu);
 game.state.add('over',mainOver);
-game.state.start('main');
-
+game.state.start('menu');
