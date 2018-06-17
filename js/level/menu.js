@@ -29,16 +29,16 @@ var mainMenu = {
 		t.events.onInputDown.add(laucher, this);
 	},
 	update: function(game) {
-		this.imagMenu.sprites.sky.tilePosition.x -= gameSpeed*0.1 ;
-		this.imagMenu.sprites.fleur.tilePosition.x -= gameSpeed*1.1 ;
-		this.imagMenu.sprites.vent.tilePosition.x -= gameSpeed*10 ;
-		this.imagMenu.sprites.bee.x += gameSpeed * 2;
+		this.imagMenu.sprites.sky.tilePosition.x -= window.gameSpeed*0.1 ;
+		this.imagMenu.sprites.fleur.tilePosition.x -= window.gameSpeed*1.1 ;
+		this.imagMenu.sprites.vent.tilePosition.x -= window.gameSpeed*10 ;
+		this.imagMenu.sprites.bee.x += window.gameSpeed * 2;
 		var rnd = game.rnd.integerInRange(-5, 5);
 		this.imagMenu.sprites.bee.y = rnd;
 		if(this.imagMenu.sprites.bee.x > gameWidth+this.imagMenu.sprites.bee.width ){
 			this.imagMenu.sprites.bee.x = 0 - this.imagMenu.sprites.bee.width;
 		}
-		this.imagMenu.sprites.unicorn.x += gameSpeed * 0.2;
+		this.imagMenu.sprites.unicorn.x += window.gameSpeed * 0.2;
 		if(this.imagMenu.sprites.unicorn.x > gameWidth+this.imagMenu.sprites.unicorn.width ){
 			this.imagMenu.sprites.unicorn.x = 0 - this.imagMenu.sprites.unicorn.width;
 		}

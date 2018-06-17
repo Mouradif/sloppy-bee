@@ -25,14 +25,15 @@ function beeRestart(game) {
 		game.sloppyBee.flowers[0].sprite.destroy();
 		game.sloppyBee.flowers.shift();
 	}
-	game.sloppyBee.sprites.bee.x = gameWidth / 2;
-	game.sloppyBee.sprites.bee.y = gameHeight / 2;
-	game.sloppyBee.score = 0;
-	game.sloppyBee.gameDifficulty = 0;
-	game.buttonR.destroy();
-	game.gameOver = false;
-	game.sloppyBee.moveFunction = touchToFly;
-	game.game.time.events.add(Phaser.Timer.SECOND * 1, function(){
+	game.game.time.events.add(Phaser.Timer.SECOND * 0.2, function(){
+		game.sloppyBee.sprites.bee.x = gameWidth / 2;
+		game.sloppyBee.sprites.bee.y = gameHeight / 2;
+		game.sloppyBee.score = 0;
+		game.sloppyBee.gameDifficulty = 0;
+		game.gameOver = false;
+		game.sloppyBee.moveFunction = touchToFly;
+	    game.buttonR.destroy();
+		game.gameStarted = false;
 		game.gameOver = false;
 	}, game);
 }

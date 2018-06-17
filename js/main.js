@@ -9,17 +9,19 @@ function preload() {
 	this.load.image('buttonClassement', 'image/classement.png');
 	//this.load.image('tipsText', 'image/panel_text.png');
 	this.load.spritesheet('bee', 'image/bee.png', 48, 34, 3);
+	this.load.spritesheet('unibee', 'image/unibee.png', 58, 34, 3);
 	this.load.image('sol', 'image/solfleuri.png');
 	this.load.image('monts', 'image/mount.png');
 	this.load.spritesheet('bluespit', 'image/spit1.png', 48, 48, 8);
 	this.load.spritesheet('brownspit', 'image/spit2.png', 48, 48, 8);
+	this.load.spritesheet('orangespit', 'image/spit3.png', 48, 48, 8);
 	this.load.spritesheet('pollen1', 'image/fleur1.png', 48, 48, 2);
-	this.load.spritesheet('pollen1','image/pollen.png',48,48,2 );
 	this.load.audio('beep','son/beep.mp3');
 	this.load.audio('mbeep','son/mbeep.mp3');
 	this.load.audio('death','son/die.wav');
 	this.load.audio('game','son/gameLoop.wav');	
 	this.load.audio('mobAdd','son/mobAdd.mp3');
+	this.load.audio('unicorn', 'son/unicorn.wav');
 }
 
 
@@ -37,6 +39,7 @@ function create () {
 			pesticidized: game.add.audio('beep'),
 			death: game.add.audio('death'),
 			game : game.add.audio('game'),
+			unicorn: game.add.audio('unicorn'),
 			mobAdd: game.add.audio('mobAdd')
 		},
 		enemies: [],
@@ -61,8 +64,22 @@ function create () {
 	this.sloppyBee.gameDifficulty = 0;
 	this.gameStarted = false;
 	this.gameOver = false;
-	this.unicornLevel = 0;
-	this.unicornFramesRemaining = 0;
+	this.sloppyBee.availableEnemies = [{
+		sprite: 'bluespit',
+		malus: slowFly
+	}, {
+		sprite: 'brownspit',
+		malus: inversTouchToFly
+	}, {
+		sprite: 'orangespit',
+		malus: staticFly
+	}];
+	this.sloppyBee.unicornLevel = -1;
+	this.sloppyBee.unicornFramesRemaining = 0;
+	this.sinus = [];
+	for (var i = 0; i < 500; i++) {
+		this.sinus.push(((Math.cos(i / 5) + 1) * (gameHeight / 4) / 2) + gameHeight / 4);
+	}
 }
 
 function update() {
@@ -79,8 +96,24 @@ function update() {
 	}
 	
 	this.sloppyBee.gameDifficulty++;
-	gameSpeed = 2 + this.sloppyBee.gameDifficulty * 0.0001;
-	this.sloppyBee.moveFunction(this);
+	if (this.sloppyBee.score / 100 > this.sloppyBee.unicornLevel) {
+		this.sloppyBee.unicornFramesRemaining = 500;
+		this.sloppyBee.unicornLevel++;
+		this.previousGameSpeed = window.gameSpeed;
+		this.sloppyBee.audio.game.pause();
+		this.sloppyBee.audio.unicorn.play();
+		this.sloppyBee.sprites.bee.loadTexture('unibee');
+		this.sloppyBee.sprites.bee.animations.add('fly');
+		this.sloppyBee.sprites.bee.animations.play('fly', 10, true);
+
+		window.gameSpeed = window.gameSpeed * 2;
+	}
+	if (this.sloppyBee.unicornFramesRemaining > 0)
+		unicornMove(this);
+	else
+		this.sloppyBee.moveFunction(this);
+	if (this.sloppyBee.unicornFramesRemaining == 0)
+		window.gameSpeed = 2 + this.sloppyBee.gameDifficulty * 0.0001;
 	for (var i = 0; i < this.sloppyBee.enemies.length; i++) {
 		spit = this.sloppyBee.enemies[i];
 		spit.sprite.x -= spit.speed;
@@ -100,14 +133,17 @@ function update() {
 	}
 	for (var j = 0; j < this.sloppyBee.flowers.length; j++) {
 		pollen = this.sloppyBee.flowers[j];
-		pollen.sprite.x -= gameSpeed;
+		pollen.sprite.x -= window.gameSpeed;
 		if (isColliding(pollen.sprite, this.sloppyBee.sprites.bee, 15)){
 			this.sloppyBee.score += pollen.bonus;
 			if (!this.sloppyBee.audio.pollenized.isPlaying || this.sloppyBee.audio.pollenized.currentTime > 80)
 				this.sloppyBee.audio.pollenized.play('',0,0.3,false);
 			pollen.sprite.destroy();
+			/* une chance sur X de retablir l'etat normal, X etant dependant de la difficulte */
+			var rnd = game.rnd.integerInRange(0, Math.max(1, this.sloppyBee.gameDifficulty / 1000));
+			if (rnd == 0)
+				this.sloppyBee.moveFunction = touchToFly;
 		}
-			
 		if (pollen.sprite.x < -48) {
 			pollen.sprite.destroy();
 			this.sloppyBee.flowers.splice(j, 1);
@@ -119,11 +155,11 @@ function update() {
 		spawnPollen(this, 'pollen', randomInt % 3);
 	var shouldSpawnSpit = Math.floor(this.sloppyBee.gameDifficulty / 250) - this.sloppyBee.enemies.length;
 	if (shouldSpawnSpit > 1) {
-		var malchance = randomInt % 15;
+		var malchance = randomInt % 80;
 		if (malchance == 0) {
-			var enemies = ['bluespit', 'brownspit'];
-			var maluses = [inversTouchToFly, staticFly];
-			spawnSpit(this, 'spit', enemies[randomInt % enemies.length], maluses[randomInt % maluses.length], (randomInt % 4 + 2) * gameSpeed);
+			randomInt = game.rnd.integer();
+			var index = randomInt % this.sloppyBee.availableEnemies.length;
+			spawnSpit(this, 'spit', this.sloppyBee.availableEnemies[index].sprite, this.sloppyBee.availableEnemies[index].malus, (randomInt % 4 + 2) * window.gameSpeed);
 			this.sloppyBee.audio.mobAdd.play('', 0, 0.3, false);
 		}
 	}
