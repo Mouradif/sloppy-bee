@@ -37,7 +37,8 @@ function create () {
 		flowers: []
 	};
 
-	this.sloppyBee.audio.game.play('',0,0.3,true);
+	if (!this.sloppyBee.audio.game.isPlaying)
+		this.sloppyBee.audio.game.play('',0,0.3,true);
 	this.sloppyBee.sprites.bee.originalTint = this.sloppyBee.sprites.bee.tint;
 	this.sloppyBee.sprites.bee.tintingFramesRemaining = 0;
 	this.sloppyBee.sprites.bee.fallingStage = 1;
@@ -52,6 +53,8 @@ function create () {
 	this.sloppyBee.gameDifficulty = 0;
 	this.gameStarted = false;
 	this.gameOver = false;
+	this.unicornLevel = 0;
+	this.unicornFramesRemaining = 0;
 }
 
 function update() {
@@ -66,6 +69,7 @@ function update() {
 	) {
 		gameOver(this);
 	}
+	
 	this.sloppyBee.gameDifficulty++;
 	this.sloppyBee.moveFunction(this);
 	for (var i = 0; i < this.sloppyBee.enemies.length; i++) {

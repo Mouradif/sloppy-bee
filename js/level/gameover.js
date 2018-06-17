@@ -5,14 +5,35 @@ function gameOver(game) {
 	game.gameStarted = false;
 
 	/* TODO: Add Text on Screen with Score + Button retry */
-    var styleR = { font: '65px Arial', fill: '#4286f4', align: 'center' };
-    var styleScore = { font: '65px Arial', fill: '#ff0044', align: 'center' };
-    var finalScore = game.add.text(gameWidth/2-gameWidth*0.25,gameHeight/2 , 'Score: ' + game.sloppyBee.score, styleScore);
-    var buttonR = game.add.text(gameWidth/2+10,gameHeight/2 , 'Rejouer', styleR);
-    buttonR.inputEnabled = true;
-    buttonR.events.onInputDown.add(beeRestart, this);
+	var styleR = { font: '65px Arial', fill: '#4286f4', align: 'center' };
+	var styleScore = { font: '65px Arial', fill: '#ff0044', align: 'center' };
+	game.finalScore = game.add.text(gameWidth/2 - 100,gameHeight/2 - 60, 'Score: ' + game.sloppyBee.score, styleScore);
+	game.buttonR = game.add.text(gameWidth/2 - 100,gameHeight/2, 'Rejouer', styleR);
+	game.buttonR.inputEnabled = true;
+	game.buttonR.events.onInputDown.add(function() {
+		beeRestart(game);
+	}, game);
 }
 
-function beeRestart () {
-    game.state.start(game.state.current);
+function beeRestart (game) {
+	while(game.sloppyBee.enemies.length > 0) {
+		console.log('Spliced ennemy');
+		game.sloppyBee.enemies[0].sprite.destroy();
+		game.sloppyBee.enemies.shift();
+	}
+	while(game.sloppyBee.flowers.length > 0) {
+		console.log('Spliced flower');
+		game.sloppyBee.flowers[0].sprite.destroy();
+		game.sloppyBee.flowers.shift();
+	}
+	game.sloppyBee.sprites.bee.x = gameWidth / 2;
+	game.sloppyBee.sprites.bee.y = gameHeight / 2;
+	game.sloppyBee.score = 0;
+	game.sloppyBee.gameDifficulty = 0;
+	game.buttonR.destroy();
+	game.finalScore.destroy();
+	game.gameOver = false;
+	game.game.time.events.add(Phaser.Timer.SECOND * 1, function(){
+		game.gameOver = false;
+	}, game);
 }
