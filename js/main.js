@@ -9,14 +9,18 @@ function preload() {
 	this.load.spritesheet('brownspit', 'image/spit2.png', 48, 48, 8);
 	this.load.spritesheet('pollen1', 'image/fleur1.png', 48, 48, 2);
 	this.load.spritesheet('pollen1','image/pollen.png',48,48,2 );
-	this.load.audio('beep','son/Beep.wav');
-	this.load.audio('mbeep','son/mbeep.wav');
+	this.load.audio('beep','son/beep.mp3');
+	this.load.audio('mbeep','son/mbeep.mp3');
 	this.load.audio('death','son/die.wav');
+    this.load.audio('menu','son/menuLoop.wav');
+	this.load.audio('game','son/gameLoop.wav');
+    this.load.audio('mobAdd','son/mobAdd.mp3');
     
 }
 
 
 function create () {
+
 	this.sloppyBee = {
 		sprites: {
 			sky: game.add.tileSprite(0, 0, gameWidth, gameHeight, 'sky'),
@@ -27,12 +31,15 @@ function create () {
 		audio: {
 			pollenized: game.add.audio('mbeep'),
 			pesticidized: game.add.audio('beep'),
-			death: game.add.audio('death')
+			death: game.add.audio('death'),
+            game : game.add.audio('game'),
+            mobAdd: game.add.audio('mobAdd')
 		},
 		enemies: [],
 		flowers: []
 	};
 
+    this.sloppyBee.audio.game.play('',0,0.3,true);
 	this.sloppyBee.sprites.bee.originalTint = this.sloppyBee.sprites.bee.tint;
 	this.sloppyBee.sprites.bee.tintingFramesRemaining = 0;
 	this.sloppyBee.sprites.bee.fallingStage = 1;
@@ -44,7 +51,6 @@ function create () {
 		fill: '#000'
 	});
 	this.sloppyBee.beep = game.add.audio('beep');
-	this.sloppyBee.mbeep = 
 	this.sloppyBee.gameDifficulty = 0;
 	this.gameStarted = false;
 }
@@ -69,7 +75,7 @@ function update() {
 		if (isColliding(spit.sprite, this.sloppyBee.sprites.bee, 20)) {
 			this.sloppyBee.moveFunction = spit.malus;
 			spit.sprite.destroy();
-			this.sloppyBee.audio.pesticidized.play();
+			this.sloppyBee.audio.pesticidized.play('',0,0.3,false);
 			this.sloppyBee.enemies.splice(i, 1);
 			this.sloppyBee.sprites.bee.tintingFramesRemaining = 50;
 			this.sloppyBee.score -= spit.speed;
@@ -86,7 +92,7 @@ function update() {
 		if (isColliding(pollen.sprite, this.sloppyBee.sprites.bee, 20)){
 			this.sloppyBee.score += pollen.bonus;
 			if (!this.sloppyBee.audio.pollenized.isPlaying || this.sloppyBee.audio.pollenized.currentTime > 80)
-				this.sloppyBee.audio.pollenized.play();
+                this.sloppyBee.audio.pollenized.play('',0,0.3,false);
 			pollen.sprite.destroy();
 		}
 			
@@ -104,6 +110,7 @@ function update() {
 		var enemies = ['bluespit', 'brownspit'];
 		var maluses = [inversTouchToFly, staticFly];
 		spawnSpit(this, 'spit', enemies[randomInt % enemies.length], maluses[randomInt % maluses.length], (randomInt % 4 + 2) * gameSpeed);
+        this.sloppyBee.audio.mobAdd.play('',0,0.3,false);
 	}
 	this.sloppyBee.scoreText.text = 'Score: ' + this.sloppyBee.score;
 	parallaxBackgrounds(this);
