@@ -3,7 +3,7 @@
 function preload() {
 	this.load.image('sky','image/sky.jpg');
 	this.load.image('bee', 'image/bee.png');
-	this.load.image('sol', 'image/sol.png');
+	this.load.image('sol', 'image/solfleuri.png');
 	this.load.image('monts', 'image/monts.png');
 	this.load.spritesheet('bluespit', 'image/spit1.png', 48, 48, 8);
 	this.load.spritesheet('brownspit', 'image/spit2.png', 48, 48, 8);
@@ -13,7 +13,7 @@ function preload() {
 	this.load.audio('mbeep','son/mbeep.mp3');
 	this.load.audio('death','son/die.wav');
 	this.load.audio('game','son/gameLoop.wav');
-    this.load.audio('mobAdd','son/mobAdd.mp3');
+	this.load.audio('mobAdd','son/mobAdd.mp3');
     
 }
 
@@ -23,22 +23,22 @@ function create () {
 	this.sloppyBee = {
 		sprites: {
 			sky: game.add.tileSprite(0, 0, gameWidth, gameHeight, 'sky'),
-			sol : game.add.tileSprite(0, 0, gameWidth, gameHeight, 'sol'),
-			monts : game.add.tileSprite(0, 0, gameWidth, gameHeight, 'monts'),
+			monts : game.add.tileSprite(0, gameHeight - 201, gameWidth, 201, 'monts'),
+			sol : game.add.tileSprite(0, gameHeight - 107, gameWidth, 107, 'sol'),
 			bee: game.add.sprite(gameWidth / 2, gameHeight / 2, 'bee')
 		},
 		audio: {
 			pollenized: game.add.audio('mbeep'),
 			pesticidized: game.add.audio('beep'),
 			death: game.add.audio('death'),
-            game : game.add.audio('game'),
-            mobAdd: game.add.audio('mobAdd')
+			game : game.add.audio('game'),
+			mobAdd: game.add.audio('mobAdd')
 		},
 		enemies: [],
 		flowers: []
 	};
 
-    this.sloppyBee.audio.game.play('',0,0.3,true);
+	this.sloppyBee.audio.game.play('',0,0.3,true);
 	this.sloppyBee.sprites.bee.originalTint = this.sloppyBee.sprites.bee.tint;
 	this.sloppyBee.sprites.bee.tintingFramesRemaining = 0;
 	this.sloppyBee.sprites.bee.fallingStage = 1;
@@ -52,6 +52,7 @@ function create () {
 	this.sloppyBee.beep = game.add.audio('beep');
 	this.sloppyBee.gameDifficulty = 0;
 	this.gameStarted = false;
+	this.gameOver = true;
 }
 
 function update() {
@@ -91,7 +92,7 @@ function update() {
 		if (isColliding(pollen.sprite, this.sloppyBee.sprites.bee, 20)){
 			this.sloppyBee.score += pollen.bonus;
 			if (!this.sloppyBee.audio.pollenized.isPlaying || this.sloppyBee.audio.pollenized.currentTime > 80)
-                this.sloppyBee.audio.pollenized.play('',0,0.3,false);
+				this.sloppyBee.audio.pollenized.play('',0,0.3,false);
 			pollen.sprite.destroy();
 		}
 			
@@ -101,15 +102,18 @@ function update() {
 		}
 	}
 	var randomInt = game.rnd.integer();
-	var chance = randomInt % 32;
+	var chance = randomInt % 100;
 	if (chance == 0)
 		spawnPollen(this, 'pollen', randomInt % 3);
-	var malchance = Math.floor(this.sloppyBee.gameDifficulty / 250) - this.sloppyBee.enemies.length;
-	if (malchance > 1) {
-		var enemies = ['bluespit', 'brownspit'];
-		var maluses = [inversTouchToFly, staticFly];
-		spawnSpit(this, 'spit', enemies[randomInt % enemies.length], maluses[randomInt % maluses.length], (randomInt % 4 + 2) * gameSpeed);
-        this.sloppyBee.audio.mobAdd.play('',0,0.3,false);
+	var shouldSpawnSpit = Math.floor(this.sloppyBee.gameDifficulty / 250) - this.sloppyBee.enemies.length;
+	if (shouldSpawnSpit > 1) {
+		var malchance = randomInt % 15;
+		if (malchance == 0) {
+			var enemies = ['bluespit', 'brownspit'];
+			var maluses = [inversTouchToFly, staticFly];
+			spawnSpit(this, 'spit', enemies[randomInt % enemies.length], maluses[randomInt % maluses.length], (randomInt % 4 + 2) * gameSpeed);
+			this.sloppyBee.audio.mobAdd.play('', 0, 0.3, false);
+		}
 	}
 	this.sloppyBee.scoreText.text = 'Score: ' + this.sloppyBee.score;
 	parallaxBackgrounds(this);

@@ -1,11 +1,11 @@
 var mainOver = {
 	preload: function(game) {
         
-    },
+	},
 	create: function(game) {
-        console.log('hello !');
-    },
+		console.log('hello !');
+	},
 	update: function(game) {
         
-    }
+	}
 };
