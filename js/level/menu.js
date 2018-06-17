@@ -1,12 +1,12 @@
 var mainMenu = {
 	preload: function(game) {
+
         this.load.image('vent','image/vent.png');
-        this.load.image('licon','image/licon.png');
-        this.load.image('bebe','image/bebe.png');
         this.load.image('fleur','image/fleur.png');
         this.load.image('bee','image/licon.png');
         this.load.image('sky','image/sky.png');
         this.load.audio('menu','son/menuLoop.wav');
+        this.load.image('jouer','image/joue.png');
     },
 	create: function(game) {
         audioMenu = game.add.audio('menu');
@@ -18,11 +18,23 @@ var mainMenu = {
             fleur: this.add.tileSprite(0, 200, gameWidth, gameHeight, 'fleur'),
 //            bebe : this.add.sprite(0, 0, 'bebe'),
 			vent: this.add.tileSprite(0, 0, gameWidth, gameHeight, 'vent'),
-			
 //			licon : game.add.tileSprite(0, 0, gameWidth, gameHeight, 'licon')
 		}
-       }},
+           
+        
+//        
+        
+       }
+    
+    var text = "Jouer";
+    var style = { font: "65px Arial", fill: "#ff0044", align: "center" };
+    var t = game.add.text(gameWidth/2-60, 0, text, style);
+        t.inputEnabled = true;
+        t.events.onInputDown.add(laucher, this);
+        
+    },
 	update: function(game) {
+        
         this.imagMenu.sprites.sky.tilePosition.x -= gameSpeed*0.1 ;
         this.imagMenu.sprites.fleur.tilePosition.x -= gameSpeed*1.1 ;
         this.imagMenu.sprites.vent.tilePosition.x -= gameSpeed*10 ;
@@ -32,3 +44,7 @@ var mainMenu = {
 
     
 };
+
+function laucher() {
+    this.state.start('main');
+}
