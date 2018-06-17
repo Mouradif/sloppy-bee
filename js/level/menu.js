@@ -13,7 +13,7 @@ var mainMenu = {
 		this.audioMenu.play('',0,0.3,true);
 		this.imagMenu = {
 			sprites: {
-				sky: this.add.tileSprite(0, 100, gameWidth, gameHeight, 'sky'),
+				sky: this.add.tileSprite(0, 0, gameWidth, gameHeight, 'sky'),
 				bee: this.add.sprite(gameWidth/2-gameWidth*0.3, gameHeight/2, 'bee'),
 				fleur: this.add.tileSprite(0, gameHeight - 107, gameWidth, 107, 'fleur'),
 				//            bebe : this.add.sprite(0, 0, 'bebe'),

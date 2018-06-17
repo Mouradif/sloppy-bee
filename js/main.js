@@ -1,10 +1,15 @@
 // Initalization script
 
 function preload() {
-	this.load.image('sky','image/sky.jpg');
-	this.load.image('bee', 'image/bee.png');
+	this.load.image('sky','image/sky.png');
+	this.load.image('gameOverPannel', 'image/gameover_panel.png');
+	this.load.image('leSaviezVous', 'image/lesaviezvous.png');
+	this.load.image('buttonRejouer', 'image/rejouer.png');
+	this.load.image('buttonClassement', 'image/classement.png');
+	//this.load.image('tipsText', 'image/panel_text.png');
+	this.load.spritesheet('bee', 'image/bee.png', 48, 34, 3);
 	this.load.image('sol', 'image/solfleuri.png');
-	this.load.image('monts', 'image/monts.png');
+	var f = this.load.image('monts', 'image/mount.png');
 	this.load.spritesheet('bluespit', 'image/spit1.png', 48, 48, 8);
 	this.load.spritesheet('brownspit', 'image/spit2.png', 48, 48, 8);
 	this.load.spritesheet('pollen1', 'image/fleur1.png', 48, 48, 2);
@@ -12,7 +17,7 @@ function preload() {
 	this.load.audio('beep','son/beep.mp3');
 	this.load.audio('mbeep','son/mbeep.mp3');
 	this.load.audio('death','son/die.wav');
-	this.load.audio('game','son/gameLoop.wav');
+	this.load.audio('game','son/gameLoop.wav');	
 	this.load.audio('mobAdd','son/mobAdd.mp3');
 }
 
@@ -22,7 +27,7 @@ function create () {
 	this.sloppyBee = {
 		sprites: {
 			sky: game.add.tileSprite(0, 0, gameWidth, gameHeight, 'sky'),
-			monts : game.add.tileSprite(0, gameHeight - 201, gameWidth, 201, 'monts'),
+			monts : game.add.tileSprite(0, gameHeight - 160, gameWidth, 160, 'monts'),
 			sol : game.add.tileSprite(0, gameHeight - 107, gameWidth, 107, 'sol'),
 			bee: game.add.sprite(gameWidth / 2, gameHeight / 2, 'bee')
 		},
@@ -37,6 +42,8 @@ function create () {
 		flowers: []
 	};
 
+	this.sloppyBee.sprites.bee.animations.add('fly');
+	this.sloppyBee.sprites.bee.animations.play('fly', 10, true);
 	if (!this.sloppyBee.audio.game.isPlaying)
 		this.sloppyBee.audio.game.play('',0,0.3,true);
 	this.sloppyBee.sprites.bee.originalTint = this.sloppyBee.sprites.bee.tint;
@@ -71,11 +78,12 @@ function update() {
 	}
 	
 	this.sloppyBee.gameDifficulty++;
+	gameSpeed = 2 + this.sloppyBee.gameDifficulty * 0.0001;
 	this.sloppyBee.moveFunction(this);
 	for (var i = 0; i < this.sloppyBee.enemies.length; i++) {
 		spit = this.sloppyBee.enemies[i];
 		spit.sprite.x -= spit.speed;
-		if (isColliding(spit.sprite, this.sloppyBee.sprites.bee, 20)) {
+		if (isColliding(spit.sprite, this.sloppyBee.sprites.bee, 5)) {
 			this.sloppyBee.moveFunction = spit.malus;
 			spit.sprite.destroy();
 			this.sloppyBee.audio.pesticidized.play('',0,0.3,false);
@@ -92,7 +100,7 @@ function update() {
 	for (var j = 0; j < this.sloppyBee.flowers.length; j++) {
 		pollen = this.sloppyBee.flowers[j];
 		pollen.sprite.x -= gameSpeed;
-		if (isColliding(pollen.sprite, this.sloppyBee.sprites.bee, 20)){
+		if (isColliding(pollen.sprite, this.sloppyBee.sprites.bee, 15)){
 			this.sloppyBee.score += pollen.bonus;
 			if (!this.sloppyBee.audio.pollenized.isPlaying || this.sloppyBee.audio.pollenized.currentTime > 80)
 				this.sloppyBee.audio.pollenized.play('',0,0.3,false);
@@ -118,6 +126,7 @@ function update() {
 			this.sloppyBee.audio.mobAdd.play('', 0, 0.3, false);
 		}
 	}
+	this.sloppyBee.score = Math.round(this.sloppyBee.score);
 	this.sloppyBee.scoreText.text = 'Score: ' + this.sloppyBee.score;
 	parallaxBackgrounds(this);
 	tintTheBee(this);
