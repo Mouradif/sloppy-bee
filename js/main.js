@@ -132,5 +132,4 @@ var game = new Phaser.Game(gameWidth, gameHeight);
 game.state.add('main', mainState);
 game.state.add('menu',mainMenu);
 game.state.add('over',mainOver);
-game.state.start('main');
-
+game.state.start('menu');
