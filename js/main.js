@@ -82,11 +82,11 @@ function create () {
 		sprite: 'orangespit',
 		malus: staticFly
 	}];
-	this.sloppyBee.unicornLevel = -1;
+	this.sloppyBee.unicornLevel = 1;
 	this.sloppyBee.unicornFramesRemaining = 0;
 	this.sinus = [];
 	for (var i = 0; i < 500; i++) {
-		this.sinus.push(((Math.cos(i / 5) + 1) * (gameHeight / 4) / 2) + gameHeight / 4);
+		this.sinus.push(((Math.cos(i / 4) + 1) * (gameHeight / 4) / 2) + gameHeight / 4);
 	}
 }
 
@@ -130,7 +130,7 @@ function update() {
 	}
 	
 	this.sloppyBee.gameDifficulty++;
-	if (this.sloppyBee.score / 100 > this.sloppyBee.unicornLevel) {
+	if (this.sloppyBee.score - (100 * this.sloppyBee.unicornLevel) > 0) {
 		this.sloppyBee.unicornFramesRemaining = 500;
 		this.sloppyBee.unicornLevel++;
 		this.previousGameSpeed = window.gameSpeed;
@@ -140,7 +140,7 @@ function update() {
 		this.sloppyBee.sprites.bee.animations.add('fly');
 		this.sloppyBee.sprites.bee.animations.play('fly', 10, true);
 
-		window.gameSpeed = window.gameSpeed * 2;
+		window.gameSpeed = window.gameSpeed * 3;
 	}
 	if (this.sloppyBee.unicornFramesRemaining > 0)
 		unicornMove(this);
@@ -152,13 +152,15 @@ function update() {
 		spit = this.sloppyBee.enemies[i];
 		spit.sprite.x -= spit.speed;
 		if (isColliding(spit.sprite, this.sloppyBee.sprites.bee, 5)) {
-			this.sloppyBee.moveFunction = spit.malus;
-			spit.sprite.destroy();
-			this.sloppyBee.audio.pesticidized.play('',0,0.3,false);
-			this.sloppyBee.enemies.splice(i, 1);
-			this.sloppyBee.sprites.bee.tintingFramesRemaining = 50;
-			this.sloppyBee.score -= spit.speed;
-			this.sloppyBee.score = Math.max(0, this.sloppyBee.score);
+			if (this.sloppyBee.unicornFramesRemaining == 0) {
+				this.sloppyBee.moveFunction = spit.malus;
+				spit.sprite.destroy();
+				this.sloppyBee.audio.pesticidized.play('',0,0.3,false);
+				this.sloppyBee.enemies.splice(i, 1);
+				this.sloppyBee.sprites.bee.tintingFramesRemaining = 50;
+				this.sloppyBee.score -= spit.speed;
+				this.sloppyBee.score = Math.max(0, this.sloppyBee.score);
+			}
 		}
 		if (spit.sprite.x < -48) {
 			spit.sprite.destroy();
@@ -186,7 +188,7 @@ function update() {
 	var randomInt = game.rnd.integer();
 	var chance = randomInt % 100;
 	if (chance == 0)
-		spawnPollen(this, 'pollen', randomInt % 3);
+		spawnPollen(this, 'pollen', (randomInt % 3) + 1);
 	var shouldSpawnSpit = Math.floor(this.sloppyBee.gameDifficulty / 250) - this.sloppyBee.enemies.length;
 	if (shouldSpawnSpit > 1) {
 		var malchance = randomInt % 80;
