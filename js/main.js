@@ -12,7 +12,6 @@ function preload() {
 	this.load.audio('beep','son/beep.mp3');
 	this.load.audio('mbeep','son/mbeep.mp3');
 	this.load.audio('death','son/die.wav');
-    this.load.audio('menu','son/menuLoop.wav');
 	this.load.audio('game','son/gameLoop.wav');
     this.load.audio('mobAdd','son/mobAdd.mp3');
     
@@ -124,6 +123,10 @@ var mainState = {
 	update: update
 };
 
+
 var game = new Phaser.Game(gameWidth, gameHeight);
 game.state.add('main', mainState);
+game.state.add('menu',mainMenu);
+game.state.add('over',mainOver);
 game.state.start('main');
+
